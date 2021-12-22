@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sokect en Flask</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <ul id="messages">
+    {% for m in messages %}
+            <li>
+                {{ m.message }}
+                <span>{{ m.user.username }}</span>
+                <span>{{m.created_at}}</span>
+            </li>
+    {% endfor %}
+    
+    </ul>
+
+    <textarea id="message"></textarea>
+
+    <button onclick="sendMsj()">Enviar</button>
+
+    <script>
+
+        var socket = io()
+
+        function sendMsj() {
+
+            message = document.querySelector("#message")
+
+            if (message.value.trim() == "")
+                return alert("No hay mensaje que enviar")
+
+            socket.emit('chat', { message: message.value.trim(), room:"{{ room }}"})
+
+            message.value = ""
+
+        }
+
+        // function sendMsj() {
+        //     //socket.emit('event',"andres")
+        //     socket.emit('event_json',{ name:"andres", surname:"cruz", age: 30 }, 50)
+        // }
+
+        socket.on('connect', function () {
+            console.log("Conectados!")
+        })
+        socket.on('disconnect', function () {
+            console.log("Desconectados!")
+        })
+
+        socket.on('chat', function (message) {
+            //message = JSON.stringify(message)
+            //console.log("chat " + message.message)
+
+            console.log(JSON.stringify(message))
+
+            messages = document.getElementById("messages")
+
+            // li
+            li = document.createElement("li")
+            li.innerHTML =  `
+            ${message.message}
+                <span>${ message.username }</span>
+                <span>${message.created_at}</span>
+                `
+
+            messages.appendChild(li)
+
+
+        })
+
+
+    </script>
+
+    <h1>Hola Mundo</h1>
+</body>
+
+</html>
