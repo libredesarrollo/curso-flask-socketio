@@ -159,26 +159,30 @@
         msgsContainer.scrollTop = msgsContainer.scrollHeight;
     }
 
-    function addChatMessage(msg, roomInfo = "") {
+    function addChatMessage(msgData) {
         if(messagesList.querySelector('.text-muted.mt-3')) {
             messagesList.innerHTML = '';
         }
         
         const li = document.createElement('li');
-        li.className = "mb-2 pb-1 border-bottom border-light";
+        li.className = "mb-3 pb-2 border-bottom shadow-sm bg-white p-2 rounded";
         li.innerHTML = `
-            <div class="px-2 py-1 rounded bg-white shadow-sm d-inline-block">
-                ${roomInfo ? `<span class="badge bg-secondary me-2">${roomInfo}</span>` : ''}
-                ${msg}
+            <div class="d-flex justify-content-between">
+                <div>
+                    ${msgData.room ? `<span class="badge bg-info text-dark me-2">${msgData.room}</span>` : ''}
+                    <strong class="text-primary">${msgData.username}</strong>
+                </div>
+                <small class="text-muted">${msgData.created_at}</small>
             </div>
+            <div class="mt-1">${msgData.message}</div>
         `;
         messagesList.appendChild(li);
         msgsContainer.scrollTop = msgsContainer.scrollHeight;
     }
 
     // Socket events for chat and room coordination
-    socket.on('chat', function (msg) {
-        addChatMessage(msg);
+    socket.on('chat', function (msgData) {
+        addChatMessage(msgData);
     });
     
     socket.on('join', function (msg) {
