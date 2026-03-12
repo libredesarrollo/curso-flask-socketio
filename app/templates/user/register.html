@@ -1,21 +1,47 @@
-
-<form action="" method="post">
-
-    {{ form.username.label }}
-{{ form.username }}
-
-{{ form.email.label }}
-{{ form.email }}
-
-{{ form.name.label }}
-{{ form.name }}
-
-{{ form.password.label }}
-{{ form.password }}
-
-{{ form.confirm.label }}
-{{ form.confirm }}
-
-<button type="submit">Enviar</button>
-
-</form>
+{% extends "base.html" %}
+{% block title %}Register - SocketIO Chat{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Register</h4>
+            </div>
+            <div class="card-body">
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.name.id }}" class="form-label">{{ form.name.label.text }}</label>
+                            {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.username.id }}" class="form-label">{{ form.username.label.text }}</label>
+                            {{ form.username(class="form-control") }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.email.id }}" class="form-label">{{ form.email.label.text }}</label>
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.password.id }}" class="form-label">{{ form.password.label.text }}</label>
+                            {{ form.password(class="form-control") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.confirm.id }}" class="form-label">{{ form.confirm.label.text }}</label>
+                            {{ form.confirm(class="form-control") }}
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

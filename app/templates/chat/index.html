@@ -1,87 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Global Chat{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Global Chat ({{ room }})</h4>
+                <span class="badge bg-success" id="connection-status">Connecting...</span>
+            </div>
+            <div class="card-body bg-light">
+                <div class="chat-container d-flex flex-column" id="messages-container">
+                    <ul class="list-unstyled mb-0 w-100" id="messages">
+                        {% for m in messages %}
+                            <li class="mb-3 pb-2 border-bottom">
+                                <div class="d-flex justify-content-between">
+                                    <strong>{{ m.user.username }}</strong>
+                                    <small class="text-muted">{{ m.created_at }}</small>
+                                </div>
+                                <div class="mt-1">{{ m.message }}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="input-group mt-3">
+                    <textarea class="form-control" id="message" rows="2" placeholder="Write your message here..." onkeypress="checkEnter(event)"></textarea>
+                    <button class="btn btn-primary px-4" onclick="sendMsj()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sokect en Flask</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-        crossorigin="anonymous"></script>
-</head>
+{% block scripts %}
+<script>
+    const socket = io();
+    const messagesContainer = document.getElementById("messages-container");
+    const connectionStatus = document.getElementById("connection-status");
 
-<body>
+    // Scroll to bottom initially
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-    <ul id="messages">
-    {% for m in messages %}
-            <li>
-                {{ m.message }}
-                <span>{{ m.user.username }}</span>
-                <span>{{m.created_at}}</span>
-            </li>
-    {% endfor %}
-    
-    </ul>
+    function checkEnter(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMsj();
+        }
+    }
 
-    <textarea id="message"></textarea>
-
-    <button onclick="sendMsj()">Enviar</button>
-
-    <script>
-
-        var socket = io()
-
-        function sendMsj() {
-
-            message = document.querySelector("#message")
-
-            if (message.value.trim() == "")
-                return alert("No hay mensaje que enviar")
-
-            socket.emit('chat', { message: message.value.trim(), room:"{{ room }}"})
-
-            message.value = ""
-
+    function sendMsj() {
+        const messageInput = document.querySelector("#message");
+        const msg = messageInput.value.trim();
+        
+        if (msg === "") {
+            return;
         }
 
-        // function sendMsj() {
-        //     //socket.emit('event',"andres")
-        //     socket.emit('event_json',{ name:"andres", surname:"cruz", age: 30 }, 50)
-        // }
+        socket.emit('chat', { message: msg, room: "{{ room }}" });
+        messageInput.value = "";
+        messageInput.focus();
+    }
 
-        socket.on('connect', function () {
-            console.log("Conectados!")
-        })
-        socket.on('disconnect', function () {
-            console.log("Desconectados!")
-        })
+    socket.on('connect', function () {
+        connectionStatus.textContent = "Connected";
+        connectionStatus.className = "badge bg-success";
+    });
+    
+    socket.on('disconnect', function () {
+        connectionStatus.textContent = "Disconnected";
+        connectionStatus.className = "badge bg-danger";
+    });
 
-        socket.on('chat', function (message) {
-            //message = JSON.stringify(message)
-            //console.log("chat " + message.message)
+    socket.on('chat', function (msg_data) {
+        const messages = document.getElementById("messages");
+        const li = document.createElement("li");
+        li.className = "mb-3 pb-2 border-bottom shadow-sm bg-white p-2 rounded";
+        
+        li.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <strong class="text-primary">${msg_data.username}</strong>
+                <small class="text-muted">${msg_data.created_at}</small>
+            </div>
+            <div class="mt-1">${msg_data.message}</div>
+        `;
 
-            console.log(JSON.stringify(message))
-
-            messages = document.getElementById("messages")
-
-            // li
-            li = document.createElement("li")
-            li.innerHTML =  `
-            ${message.message}
-                <span>${ message.username }</span>
-                <span>${message.created_at}</span>
-                `
-
-            messages.appendChild(li)
-
-
-        })
-
-
-    </script>
-
-    <h1>Hola Mundo</h1>
-</body>
-
-</html>
+        messages.appendChild(li);
+        
+        // Auto scroll to latest
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+</script>
+{% endblock %}

@@ -35,7 +35,7 @@ def join(room):
     print("Join")
     join_room(room['room'])
     addRoomSession(room['room'])
-    emit('join', username+" se unio a la habitacion "+room['room'], to=room['room'], namespace='/chat')
+    emit('join', f"{username} se unio a la habitacion {room['room']}", to=room['room'], namespace='/chat')
 
 @socketio.on('leave', namespace='/chat')
 @login_required
@@ -44,7 +44,7 @@ def leave(room):
     print("leave")
     leave_room(room['room'])
     removeRoomSession(room['room'])
-    emit('leave', username+" se unio a la habitacion "+room['room'], to=room['room'], namespace='/otro')
+    emit('leave', f"{username} abandonó la habitación {room['room']}", to=room['room'], namespace='/chat')
 
 @socketio.on('connect')
 def connect():

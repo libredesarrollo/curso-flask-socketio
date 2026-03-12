@@ -1,32 +1,77 @@
 # Curso Flask-SocketIO
 
-Guía práctica para aprender a crear tus primeras aplicaciones web con Flask 3 y Python 3.
-
-https://www.desarrollolibre.net/blog/flask/curso-flask
-
-https://www.desarrollolibre.net/libros/primeros-pasos-flask
-
-Repositorio del curso de Flask + SocketIO creado por Libre Desarrollo.
+Repositorio de una aplicación de ejemplo para aprender a usar **Flask** junto con **SocketIO** para construir aplicaciones web en tiempo real.
 
 ---
 
 ## Descripción
 
-Una aplicación de ejemplo para aprender cómo usar **Flask** junto con **SocketIO** para construir aplicaciones web en tiempo real. Incluye funciones básicas como envío de mensajes en tiempo real, rutas HTTP convencionales y persistencia de datos mediante migraciones.
+Este proyecto es una aplicación web de chat en tiempo real que demuestra la integración entre el framework Flask y la librería Flask-SocketIO.
+
+Las características principales incluyen:
+- Envío y recepción de mensajes en tiempo real sin recargar la página.
+- Rutas HTTP convencionales para la estructura básica de la web.
+- Persistencia de datos de mensajes o usuarios usando una base de datos.
+- Gestión de la base de datos a través de migraciones.
 
 ---
 
 ## Tecnologías
 
-- Python  
-- Flask  
-- Flask-SocketIO  
-- Base de datos con SQLAlchemy (o la librería asociada que se use)  
-- Migraciones (por ejemplo con Flask-Migrate u otra herramienta)  
-- HTML / Plantillas (Mako, Jinja2 u otra)  
-- JavaScript en el frontend para manejos de socket
+- **Backend**: Python 3, Flask, Flask-SocketIO
+- **Base de Datos**: SQLAlchemy, Flask-Migrate
+- **Frontend**: HTML5, JavaScript, Socket.IO Client, Jinja2
+
+---
+
+## Requisitos
+
+- Python 3.8+
+- pip
+- Un entorno virtual (recomendado)
+
+---
+
+## Instalación
+
+1.  **Clona el repositorio:**
+    ```bash
+    git clone <URL-DEL-REPOSITORIO>
+    cd <NOMBRE-DEL-DIRECTORIO>
+    ```
+
+2.  **Crea y activa un entorno virtual:**
+    ```bash
+    # En Windows
+    python -m venv venv
+    .\venv\Scripts\activate
+    
+    # En macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+3.  **Instala las dependencias:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+---
+
+## Uso
+
+1.  **Aplica las migraciones de la base de datos (si es la primera vez):**
+    ```bash
+    flask db upgrade
+    ```
+
+2.  **Inicia la aplicación:**
+    ```bash
+    flask run
+    ```
+
+3.  Abre tu navegador y ve a `http://127.0.0.1:5000`.
 
 ---
 
 ## Estructura del proyecto
-
