@@ -4,7 +4,7 @@ class BaseConfig():
     TESTING = True
 
 class DevConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI='mysql+pymysql://root:root@localhost/flask_chat'
+    SQLALCHEMY_DATABASE_URI='mysql+pymysql://root:@localhost/flask_chat'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class ProConfig(BaseConfig):

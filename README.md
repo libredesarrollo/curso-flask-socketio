@@ -63,11 +63,15 @@ Las características principales incluyen:
 1.  **Aplica las migraciones de la base de datos (si es la primera vez):**
     ```bash
     flask db upgrade
+    o
+    python -m flask --app run db upgrade
     ```
 
 2.  **Inicia la aplicación:**
     ```bash
     flask run
+    o
+    python -m flask --app run
     ```
 
 3.  Abre tu navegador y ve a `http://127.0.0.1:5000`.
