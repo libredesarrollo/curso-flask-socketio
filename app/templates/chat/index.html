@@ -12,19 +12,20 @@
                 <div class="chat-container d-flex flex-column" id="messages-container">
                     <ul class="list-unstyled mb-0 w-100" id="messages">
                         {% for m in messages %}
-                            <li class="mb-3 pb-2 border-bottom">
-                                <div class="d-flex justify-content-between">
-                                    <strong>{{ m.user.username }}</strong>
-                                    <small class="text-muted">{{ m.created_at }}</small>
-                                </div>
-                                <div class="mt-1">{{ m.message }}</div>
-                            </li>
+                        <li class="mb-3 pb-2 border-bottom">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ m.user.username }}</strong>
+                                <small class="text-muted">{{ m.created_at }}</small>
+                            </div>
+                            <div class="mt-1">{{ m.message }}</div>
+                        </li>
                         {% endfor %}
                     </ul>
                 </div>
-                
+
                 <div class="input-group mt-3">
-                    <textarea class="form-control" id="message" rows="2" placeholder="Write your message here..." onkeypress="checkEnter(event)"></textarea>
+                    <textarea class="form-control" id="message" rows="2" placeholder="Write your message here..."
+                        onkeypress="checkEnter(event)"></textarea>
                     <button class="btn btn-primary px-4" onclick="sendMsj()">Send</button>
                 </div>
             </div>
@@ -52,7 +53,7 @@
     function sendMsj() {
         const messageInput = document.querySelector("#message");
         const msg = messageInput.value.trim();
-        
+
         if (msg === "") {
             return;
         }
@@ -66,7 +67,7 @@
         connectionStatus.textContent = "Connected";
         connectionStatus.className = "badge bg-success";
     });
-    
+
     socket.on('disconnect', function () {
         connectionStatus.textContent = "Disconnected";
         connectionStatus.className = "badge bg-danger";
@@ -76,7 +77,7 @@
         const messages = document.getElementById("messages");
         const li = document.createElement("li");
         li.className = "mb-3 pb-2 border-bottom shadow-sm bg-white p-2 rounded";
-        
+
         li.innerHTML = `
             <div class="d-flex justify-content-between">
                 <strong class="text-primary">${msg_data.username}</strong>
@@ -86,7 +87,7 @@
         `;
 
         messages.appendChild(li);
-        
+
         // Auto scroll to latest
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
